@@ -351,6 +351,19 @@ export function useRoomSync(roomId: string, role: 'display' | 'scanner' | 'admin
   );
 
   const startBlow = useCallback(() => {
+    // Optimistic local transition keeps the activity working on static hosts
+    // such as Vercel, where the Express WebSocket server is not available.
+    setRoom((prev) => {
+      const nextRoom: RoomState = {
+        ...prev,
+        stage: 'blowing',
+        lastUpdated: Date.now(),
+      };
+      saveRoomToCache(nextRoom as CachedRoomData);
+      broadcastChannelRef.current?.postMessage({ type: 'sync', room: nextRoom });
+      return nextRoom;
+    });
+
     const msg = { type: 'start_blow', roomId };
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(msg));
@@ -365,6 +378,17 @@ export function useRoomSync(roomId: string, role: 'display' | 'scanner' | 'admin
 
   const setStage = useCallback(
     (stage: StageType) => {
+      setRoom((prev) => {
+        const nextRoom: RoomState = {
+          ...prev,
+          stage,
+          lastUpdated: Date.now(),
+        };
+        saveRoomToCache(nextRoom as CachedRoomData);
+        broadcastChannelRef.current?.postMessage({ type: 'sync', room: nextRoom });
+        return nextRoom;
+      });
+
       const msg = { type: 'set_stage', roomId, stage };
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify(msg));
@@ -380,6 +404,18 @@ export function useRoomSync(roomId: string, role: 'display' | 'scanner' | 'admin
   );
 
   const resetRoom = useCallback(() => {
+    setRoom((prev) => {
+      const nextRoom: RoomState = {
+        ...prev,
+        scannedSeeds: [],
+        stage: 'accumulating',
+        lastUpdated: Date.now(),
+      };
+      saveRoomToCache(nextRoom as CachedRoomData);
+      broadcastChannelRef.current?.postMessage({ type: 'sync', room: nextRoom });
+      return nextRoom;
+    });
+
     const msg = { type: 'reset', roomId };
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(msg));
@@ -394,6 +430,17 @@ export function useRoomSync(roomId: string, role: 'display' | 'scanner' | 'admin
 
   const updateConfig = useCallback(
     (config: { totalSeeds?: number; bgPreset?: string; customBgUrl?: string | null; endingImageUrl?: string | null; bgDim?: number }) => {
+      setRoom((prev) => {
+        const nextRoom: RoomState = {
+          ...prev,
+          ...config,
+          lastUpdated: Date.now(),
+        };
+        saveRoomToCache(nextRoom as CachedRoomData);
+        broadcastChannelRef.current?.postMessage({ type: 'sync', room: nextRoom });
+        return nextRoom;
+      });
+
       const msg = { type: 'update_config', roomId, ...config };
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
         wsRef.current.send(JSON.stringify(msg));
