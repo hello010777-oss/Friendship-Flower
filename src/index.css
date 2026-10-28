@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "SchoolSafeOuting";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimNadeuriTTF-L.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SchoolSafeOuting";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/2408-5@1.0/HakgyoansimNadeuriTTF-B.woff2")
+    format("woff2");
+  font-weight: 700 900;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "SchoolSafeOuting", sans-serif;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: "SchoolSafeOuting", sans-serif;
+}
+
+@keyframes dandelionSway {
+  0% {
+    transform: rotate(-4.5deg);
+  }
+  100% {
+    transform: rotate(4.5deg);
+  }
+}
+
+@keyframes dandelionGentle {
+  0% {
+    transform: rotate(-1.5deg);
+  }
+  100% {
+    transform: rotate(1.5deg);
+  }
+}
+
+@keyframes seedFlyAway {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--fly-x), var(--fly-y)) scale(1.6) rotate(var(--fly-rot));
+    opacity: 0;
+  }
+}
+
+@keyframes bloomPop {
+  0% {
+    transform: scale(0.15) rotate(-35deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08) rotate(4deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes pollenFloat {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-35px) translateX(15px);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-70px) translateX(-10px);
+    opacity: 0;
+  }
+}
+
+@keyframes ambientDrift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(120px, -70px) rotate(25deg);
+  }
+  100% {
+    transform: translate(260px, -150px) rotate(50deg);
+  }
+}
+
+@keyframes ambientSway {
+  0% {
+    transform: rotate(-12deg) scale(0.95);
+  }
+  100% {
+    transform: rotate(12deg) scale(1.05);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes seedPop {
+  0% {
+    transform: scale(0.35);
+    opacity: 0.35;
+  }
+  55% {
+    transform: scale(1.28);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.seed-pop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: seedPop 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes numberButtonFloat {
+  0%,
+  100% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(5px) rotate(2deg);
+  }
+}
+
+.number-button-float {
+  animation: numberButtonFloat 3s ease-in-out infinite;
+  touch-action: manipulation;
+}
+
+.number-button-float:active {
+  animation: none;
+}
+
+/* Print optimizations for QR card sheets */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .page-break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
